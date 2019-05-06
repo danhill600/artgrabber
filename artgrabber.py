@@ -1,4 +1,5 @@
 import os
+import subprocess
 import agfunctions as af
 import pylast
 
@@ -13,6 +14,7 @@ print("^C to quit\n")
 
 # okay for now this all assumes an 'mpc idleloop > testfifo' has already
 #been started, but you should get the script to make and start the fifo
+#subprocess.call('mpc', 'idleloop',???> 
 
 while True:
     with open("testfifo", "r") as fin:
