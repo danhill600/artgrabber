@@ -1,28 +1,19 @@
-import os
+#!/usr/bin/env python3
+
 import subprocess
 import agfunctions as af
 import pylast
+import mpd
+
 
 
 network = pylast.LastFMNetwork(af.get_key())
-currentSong, album, artist, bio=af.new_album_operations(network)
+client = af.connect_client()
 
-print("I'm going to start listening to mpd, and I'll spit out some info\n")
-print("and change cover.png when a new album starts playing.  Just do a janky\n")
-print("^C to quit\n")
-
-
-# okay for now this all assumes an 'mpc idleloop > testfifo' has already
-#been started, but you should get the script to make and start the fifo
-#subprocess.call('mpc', 'idleloop',???> 
+album, artist, bio = af.new_album_operations(network, client)
 
 while True:
-    with open("testfifo", "r") as fin:
-        for line in fin:
-            print("The fifo has received a player event.\n")
-            if af.check_for_new_album(album, network):
-                print("new album detected!")
-                currentSong, album, artist, bio=af.new_album_operations(network)
-            else:
-                pass
+    for line in client.idle():
+        if af.check_for_new_album(album, client):
+            album, artist, bio = af.new_album_operations(network, client)
 
