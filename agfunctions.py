@@ -3,7 +3,8 @@ import mpd
 import os
 import subprocess
 import filecmp
-import urllib.request
+#import urllib.request
+import requests
 import shutil
 import time
 import getpass
@@ -93,10 +94,15 @@ def get_lastfm_art(network, client):
     album = network.get_album(client.currentsong()['artist'],
                               client.currentsong()['album'])
     try:
-        img_url = album.get_cover_image()
-        with urllib.request.urlopen(img_url) as response, open("cover.png", 'wb') as out_file:
-            shutil.copyfileobj(response, out_file)
+
+        url = album.get_cover_image().encode("utf-8")
+        response = requests.get(url, stream =True)
+
+        if response.status_code == 200:
+            with open('cover.png', 'wb') as out_file:
+                shutil.copyfileobj(response.raw, out_file)
             subprocess.call(['convert', '-resize', '400x400', 'cover.png', 'cover.png'])
+            del response
         print("Last.fm image written to cover.png")
     except:
         print("couldn't find a cover at last.fm, either.")
