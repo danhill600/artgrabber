@@ -16,4 +16,3 @@ while True:
     for line in client.idle():
         if af.check_for_new_album(album, client):
             album, artist, bio = af.new_album_operations(network, client)
-

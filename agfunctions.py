@@ -17,8 +17,8 @@ def get_key():
             API_KEY, API_SECRET = apikey.read().splitlines()[:2]
             return API_KEY
     except Exception as e:
-            print_exc()
-            sys.exit()
+            print(e)
+            exit()
 
 def connect_client():
     """Connect to MPD Client"""
@@ -70,6 +70,8 @@ def get_bio(artist):
         bio = artist.get_bio_content(language="en")
     except:
         bio = "No bio found."
+    if bio is None:
+        bio = "No Bio Found."
     with open("bio.txt", "w") as bio_txt:
         for line in bio:
             bio_txt.write(line)
@@ -77,7 +79,7 @@ def get_bio(artist):
 
 def get_local_art(network, client):
     theimages = []
-    musicdir= "/home/" + getpass.getuser() + "/endo/music/"
+    musicdir= "/endo/music/"
     songfile=client.currentsong()['file']
     songdir = os.path.dirname(os.path.join(musicdir,songfile))
     for fname in os.listdir(songdir):
@@ -123,6 +125,6 @@ def check_for_new_album(album, client):
 
 def enjoy_monkey():
     print("Enjoy monkey.")
-    monkeydir = "/home/" + getpass.getuser() + "/endo/pics/monkeys"
+    monkeydir = "/endo/pics/monkeys"
     monkey= monkeydir + "/" +random.choice(os.listdir(monkeydir))
     subprocess.call(['convert', '-resize', '400x400', monkey, 'cover.png'])
