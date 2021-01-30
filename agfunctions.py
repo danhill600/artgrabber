@@ -82,6 +82,8 @@ def get_local_art(network, client):
     musicdir= "/endo/music/"
     songfile=client.currentsong()['file']
     songdir = os.path.dirname(os.path.join(musicdir,songfile))
+    if songdir.endswith('cue'):
+        songdir = songdir.rsplit('/',1)[0]
     for fname in os.listdir(songdir):
         if fname.endswith(('.png','.jpg','.jpeg','gif')):
             theimages.append(songdir + "/" + fname)
