@@ -95,8 +95,11 @@ def get_local_art(network, client):
         get_lastfm_art(network, client)
 
 def get_lastfm_art(network, client):
-    album = network.get_album(client.currentsong()['artist'],
-                              client.currentsong()['album'])
+    try:
+        album = network.get_album(client.currentsong()['artist'],
+                                  client.currentsong()['album'])
+    except:
+        album = "greatest hits"
     try:
 
         url = album.get_cover_image().encode("utf-8")
