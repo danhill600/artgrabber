@@ -84,6 +84,9 @@ def get_local_art(network, client):
     songdir = os.path.dirname(os.path.join(musicdir,songfile))
     if songdir.endswith('cue'):
         songdir = songdir.rsplit('/',1)[0]
+    if songdir.endswith('zip'):
+        get_lastfm_art(network, client)
+        return
     for fname in os.listdir(songdir):
         if fname.endswith(('.png','.jpg','.jpeg','gif')):
             theimages.append(songdir + "/" + fname)
